@@ -1,1 +1,1 @@
-export { Suffiks } from "./suffiks";
+export { Suffiks, ValidationType } from "./suffiks";
