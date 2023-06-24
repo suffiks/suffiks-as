@@ -1,6 +1,6 @@
 {
 	"name": "@suffiks/suffiks-as",
-	"version": "0.0.2-pre.5",
+	"version": "0.0.2-pre.6",
 	"description": "Library to build extension for Suffiks using AssemblyScript",
 	"main": "assembly/index.ts",
 	"ascMain": "assembly/index.ts",
