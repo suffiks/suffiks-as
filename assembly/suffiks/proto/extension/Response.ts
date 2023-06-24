@@ -6,7 +6,7 @@
 import { Writer, Reader } from "as-proto/assembly";
 import { KeyValue } from "./KeyValue";
 import { EnvFrom } from "./EnvFrom";
-import { Container } from "../k8s/io/api/core/v1/Container";
+import { Container } from "./Container";
 
 export class Response {
   static encode(message: Response, writer: Writer): void {

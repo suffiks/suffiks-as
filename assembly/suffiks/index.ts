@@ -2,14 +2,14 @@ import { Protobuf, Reader } from "as-proto/assembly";
 import { JSON } from "json-as";
 import { ClientError } from "./clientError";
 import { Host } from "./env";
+import { Container } from "./proto/extension/Container";
 import { EnvFrom } from "./proto/extension/EnvFrom";
 import { EnvFromType } from "./proto/extension/EnvFromType";
+import { GroupVersionResource } from "./proto/extension/GroupVersionResource";
 import { KeyValue } from "./proto/extension/KeyValue";
 import { Owner } from "./proto/extension/Owner";
 import { ValidationError } from "./proto/extension/ValidationError";
 import { ValidationType as PBValidationType } from "./proto/extension/ValidationType";
-import { Container } from "./proto/k8s/io/api/core/v1/Container";
-import { GroupVersionResource } from "./proto/k8s/io/apimachinery/pkg/apis/meta/v1/GroupVersionResource";
 
 export { ValidationError, PBValidationType as ValidationType };
 
