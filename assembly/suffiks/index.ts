@@ -3,6 +3,7 @@ import { JSON } from "json-as";
 import { ClientError } from "./clientError";
 import { Host } from "./env";
 import { Container } from "./proto/extension/Container";
+import { DeleteResponse } from "./proto/extension/DeleteResponse";
 import { EnvFrom } from "./proto/extension/EnvFrom";
 import { EnvFromType } from "./proto/extension/EnvFromType";
 import { GroupVersionResource } from "./proto/extension/GroupVersionResource";
@@ -276,6 +277,16 @@ export namespace Suffiks {
     }
 
     return PBValidationType.CREATE;
+  }
+
+  /**
+   *
+   * @param msg the error message
+   */
+  export function deleteResponse(msg: string): Host.uint64 {
+    const dr = new DeleteResponse(msg);
+    const b = Protobuf.encode(dr, DeleteResponse.encode);
+    return stringToPtr(String.UTF8.decode(b.buffer));
   }
 
   /**
