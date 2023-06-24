@@ -100,7 +100,7 @@ export namespace Suffiks {
    * @returns the owner of the current resource
    */
   export function getOwner(): Owner {
-    const ptrAndSize = Host.getOwner() as u32;
+    const ptrAndSize = Host.getOwner();
     return decode<Owner>(ptrAndSize, Owner.decode);
   }
 
@@ -110,10 +110,11 @@ export namespace Suffiks {
    * @returns the spec defined for the extension
    */
   export function getSpec<T>(): T {
-    const ptrAndSize = Host.getSpec() as u32;
+    const ptrAndSize = Host.getSpec();
     const b = getArray(ptrAndSize);
 
     const s = String.UTF8.decode(b.buffer);
+    console.log("SPEC: " + s);
     return JSON.parse<T>(s);
   }
 
@@ -123,7 +124,7 @@ export namespace Suffiks {
    * @returns the spec defined for the extension
    */
   export function getOld<T>(): T {
-    const ptrAndSize = Host.getOld() as u32;
+    const ptrAndSize = Host.getOld();
     const b = getArray(ptrAndSize);
 
     const s = String.UTF8.decode(b.buffer);
@@ -282,32 +283,36 @@ export namespace Suffiks {
    * decode it.
    * @returns
    */
-  export function defaultingResponse<T>(obj: T): u32 {
+  export function defaultingResponse<T>(obj: T): Host.uint64 {
     const s = JSON.stringify(obj);
     return stringToPtr(s);
   }
 
-  function stringToPtr(s: string): u32 {
+  function stringToPtr(s: string): u64 {
     const enc = String.UTF8.encode(s);
     const ptr = changetype<u32>(enc);
     const size = enc.byteLength;
-    // Shift the combined pointer and size by 16 bits to get a single u64 value
-    // with the pointer in the upper 16 bits and the size in the lower 16 bits.
-    return ((ptr as u32) << 16) | (size as u32);
+    // Shift the combined pointer and size by 32 bits to get a single u64 value
+    // with the pointer in the upper 32 bits and the size in the lower 32 bits.
+    return ((ptr as u64) << 32) | (size as u64);
   }
 
   function decode<T>(
-    ptrAndSize: u32,
+    ptrAndSize: Host.uint64,
     decoder: (reader: Reader, length: i32) => T
   ): T {
     const b = getArray(ptrAndSize);
     return Protobuf.decode<T>(b, decoder);
   }
 
-  function getArray(ptrAndSize: u32): Uint8Array {
-    var size: u32 = ptrAndSize & 0xffff;
-    // Shift the combined value to the right by 16 bits to get the pointer address
-    var ptr: u32 = ptrAndSize >>> 16;
+  function getArray(ptrAndSize: Host.uint64): Uint8Array {
+    // Shift the combined value to the right by 32 bits to get the pointer address
+    var ptr: u32 = u32(ptrAndSize >>> 32);
+    var size: u32 = u32(ptrAndSize);
+
+    console.log("ptrAndSize: " + ptrAndSize.toString());
+    console.log("ptr: " + ptr.toString());
+    console.log("size: " + size.toString());
 
     const b = new Uint8Array(size);
     for (let i = u32(0); i < size; i++) {

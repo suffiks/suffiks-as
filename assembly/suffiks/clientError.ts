@@ -1,6 +1,8 @@
+import { Host } from "./env";
+
 export class ClientError {
   public code: u8;
-  constructor(c: usize) {
+  constructor(c: Host.uint64) {
     this.code = u8(c);
   }
 
